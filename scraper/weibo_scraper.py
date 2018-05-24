@@ -229,6 +229,7 @@ class WeiBoScraper(object):
                 try:
                     for i in range(page_num):
                         if i % 5 == 0 and i != 0:
+                            # 在每一页停留一段时间 ， 欺骗反扒系统
                             print('[REST] rest {}s for cheating....'.format(self.rest_time))
                             time.sleep(self.rest_time)
                         fans_url_child = 'https://weibo.cn/{}/fans?page={}'.format(self.scrap_id, i)
@@ -236,7 +237,7 @@ class WeiBoScraper(object):
                         html_child = requests.get(fans_url_child, cookies=self.cookie, headers=self.headers).content
                         selector_child = etree.HTML(html_child)
                         fans_ids_content = selector_child.xpath("//div[@class='c']/table//a[1]/@href")
-                        ids = [i.split('/')[-1] for i in fans_ids_content]
+                        ids = [i.split('/')[-1] for i in fans_ids_content]  # 这里没有考虑 一个 粉丝关注了多个 用户 时的去重， 去重操作在scrap中做了
                         ids = list(set(ids))
                         for d in ids:
                             print('appending fans id {}'.format(d))
@@ -254,7 +255,7 @@ class WeiBoScraper(object):
                 print(dump_fans_list)
                 with open(self.weibo_fans_save_file, 'wb') as f:
                     pickle.dump(dump_fans_list, f)
-                with open(self.big_v_ids_file, 'a') as f:
+                with open(self.big_v_ids_file, 'a') as f:  # 粉丝数量超过200 就算大V
                     f.write(self.scrap_id + '\n')
                 print('successfully saved fans id file into {}'.format(self.weibo_fans_save_file))
 

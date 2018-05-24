@@ -22,21 +22,26 @@ all configurations set here, follow the instructions
 import os
 
 # you should not change this properly
+
+# root_path = os.path.join(os.path.dirname(__file__), '..')
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 DEFAULT_USER_ID = 'realangelababy'
 LOGIN_URL = 'https://passport.weibo.cn/signin/login'
 
-ID_FILE_PATH = './settings/id_file'
+ID_FILE_PATH = root_path + '/id_file'
 
 
 # change this to your PhantomJS unzip path, point to bin/phantomjs executable file, full path
 PHANTOM_JS_PATH = '/Users/admin/phantomjs-2.1.1-macosx/bin/phantomjs' #'/Users/jintian/phantomjs-2.1.1-macosx/bin/phantomjs'
+CHROME_DRIVER_PATH = '/Users/admin/chromedriver'
 
 
-COOKIES_SAVE_PATH = 'settings/cookies.pkl'
+COOKIES_SAVE_PATH = root_path + '/cookies.pkl'
 
 
-CORPUS_SAVE_DIR = './scraped_corpus/'  # 语料库地址
+CORPUS_SAVE_DIR = root_path + '/scraped_corpus/'  # 语料库地址
 
-DISTRIBUTE_IDS = 'distribute_ids.pkl'
+DISTRIBUTE_IDS = root_path + '/distribute_ids.pkl'
 
-SCRAPED_MARK = './settings/scraped.mark'
+SCRAPED_MARK = root_path + '/scraped.mark'

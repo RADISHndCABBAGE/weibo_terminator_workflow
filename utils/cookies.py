@@ -26,15 +26,19 @@ PhantomJS, from http://phantomjs.org/download.html
 """
 import os
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import InvalidElementStateException
 import time
 import sys
+
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from tqdm import *
 import pickle
 
 from settings.accounts import accounts
-from settings.config import LOGIN_URL, PHANTOM_JS_PATH, COOKIES_SAVE_PATH
+from settings.config import LOGIN_URL, PHANTOM_JS_PATH, COOKIES_SAVE_PATH, CHROME_DRIVER_PATH
 
 
 def count_time():
@@ -48,15 +52,23 @@ def get_cookie_from_network(account_id, account_password):
     if os.path.exists(phantom_js_driver_file):
         try:
             print('loading PhantomJS from {}'.format(phantom_js_driver_file))
-            driver = webdriver.PhantomJS(phantom_js_driver_file)
-            # d = webdriver.Chrome()
+
+            #driver = webdriver.PhantomJS(phantom_js_driver_file)
+            driver = webdriver.Chrome(CHROME_DRIVER_PATH)
+
             # must set window size or will not find element
-            driver.set_window_size(1640, 688)
+            # driver.set_window_size(1640, 688)
             driver.get(url_login)
             # before get element sleep for 4 seconds, waiting for page render complete.
             print('opening weibo login page, this is first done for prepare for cookies. be patience to waite load '
                   'complete.')
-            count_time()
+            # count_time() # 是出于 获取Cookie登陆的方法可能会频繁调用的原因， 所以在这里sleep一下吗？
+            # 并不是出于上面所说的原因， 主要原因是要 等待页面加载完毕， 否则会 抛 InvalidElementStateException 但是实现方式太过粗错
+            # 我们可以使用智能等待的方式来实现
+
+            wait = WebDriverWait(driver, 20)
+            wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@id='loginAction']")))
+
             driver.find_element_by_xpath('//input[@id="loginName"]').send_keys(account_id)
             driver.find_element_by_xpath('//input[@id="loginPassword"]').send_keys(account_password)
             # driver.find_element_by_xpath('//input[@id="loginPassword"]').send_keys(Keys.RETURN)
@@ -71,7 +83,11 @@ def get_cookie_from_network(account_id, account_password):
                   .format(account_id))
 
         try:
+            # 这边呢要登陆成功之后才能拿到正确的Cookie， 否则拿到的Cookie不全
+            wait.until(EC.presence_of_element_located((By.ID, 'box')))
+
             cookie_list = driver.get_cookies()  # driver可能为初始化，
+            driver.close()
             cookie_string = ''
             for cookie in cookie_list:
                 if 'name' in cookie and 'value' in cookie:

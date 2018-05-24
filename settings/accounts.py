@@ -28,6 +28,8 @@ accounts = [
     {
         "id": 'plt_kingdisc@zoho.com.cn',  #'jintianiloveu',
         "password": 'kingdisc'  #'77888',
+        # "id": '18819431656',  #'jintianiloveu',
+        # "password": 'newcgerr'  #'77888',
     },
 
 ]
