@@ -44,6 +44,13 @@ import logging
 
 class WeiBoScraper(object):
     def __init__(self, using_account, scrap_id, cookies, filter_flag=0):
+        """
+
+        :param using_account:
+        :param scrap_id:
+        :param cookies:
+        :param filter_flag:
+        """
         self.using_account = using_account
         self.cookies = cookies
 
@@ -55,10 +62,10 @@ class WeiBoScraper(object):
         self.user_name = ''
         self.weibo_num = 0
         self.weibo_scraped = 0
-        self.following = 0
-        self.followers = 0
+        self.following = 0  # 关注数量
+        self.followers = 0  # 被关注数量
         self.weibo_content = []
-        self.num_zan = []
+        self.num_zan = []  # 赞
         self.num_forwarding = []
         self.num_comment = []
         self.weibo_detail_urls = []
@@ -66,10 +73,10 @@ class WeiBoScraper(object):
         self.rest_min_time = 20  # create random rest time
         self.rest_max_time = 30
 
-        self.weibo_content_save_file = os.path.join(CORPUS_SAVE_DIR, 'weibo_content.pkl')
-        self.weibo_content_and_comment_save_file = os.path.join(CORPUS_SAVE_DIR, 'weibo_content_and_comment.pkl')
-        self.weibo_fans_save_file = os.path.join(CORPUS_SAVE_DIR, 'weibo_fans.pkl')
-        self.big_v_ids_file = os.path.join(CORPUS_SAVE_DIR, 'big_v_ids.txt')
+        self.weibo_content_save_file = os.path.join(CORPUS_SAVE_DIR, 'weibo_content.pkl')  # 内容
+        self.weibo_content_and_comment_save_file = os.path.join(CORPUS_SAVE_DIR, 'weibo_content_and_comment.pkl')  # 评论
+        self.weibo_fans_save_file = os.path.join(CORPUS_SAVE_DIR, 'weibo_fans.pkl')  # 粉丝
+        self.big_v_ids_file = os.path.join(CORPUS_SAVE_DIR, 'big_v_ids.txt')  # 大Vid
 
     def _init_cookies(self):
         cookie = {
@@ -93,6 +100,7 @@ class WeiBoScraper(object):
     def jump_scraped_id(self):
         """
         check mark scrapd ids, jump scraped one.
+        判断抓取id号是否已经被抓过， 是则返回True 否则 False
         :return:
         """
         if os.path.exists(SCRAPED_MARK) and os.path.getsize(SCRAPED_MARK) > 0:
@@ -106,6 +114,11 @@ class WeiBoScraper(object):
             return False
 
     def crawl(self):
+        """
+        扒取整个页面
+        比较耗时，需要catch异常，然后返回到调度中心
+        :return:
+        """
         # this is the most time-cost part, we have to catch errors, return to dispatch center
         if self.jump_scraped_id():
             print('scrap id {} already scraped, directly pass it.'.format(self.scrap_id))
@@ -126,6 +139,8 @@ class WeiBoScraper(object):
 
     def _get_html(self):
         try:
+            # todo: 这个filter参数是干什么用的
+            # 对比手机可知这个是 关注页面
             url = 'http://weibo.cn/%s?filter=%s&page=1' % (self.scrap_id, self.filter)
             print(url)
             self.html = requests.get(url, cookies=self.cookie, headers=self.headers).content

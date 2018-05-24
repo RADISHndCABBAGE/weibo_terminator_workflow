@@ -21,6 +21,8 @@ to get weibo_terminator switch accounts automatically, please be sure install:
 
 PhantomJS, from http://phantomjs.org/download.html
 
+用 selenium 和 phantomjs 模仿登陆操作， 然后拿到Cookie并存入pickle中
+
 """
 import os
 from selenium import webdriver
@@ -47,6 +49,7 @@ def get_cookie_from_network(account_id, account_password):
         try:
             print('loading PhantomJS from {}'.format(phantom_js_driver_file))
             driver = webdriver.PhantomJS(phantom_js_driver_file)
+            # d = webdriver.Chrome()
             # must set window size or will not find element
             driver.set_window_size(1640, 688)
             driver.get(url_login)
@@ -68,7 +71,7 @@ def get_cookie_from_network(account_id, account_password):
                   .format(account_id))
 
         try:
-            cookie_list = driver.get_cookies()
+            cookie_list = driver.get_cookies()  # driver可能为初始化，
             cookie_string = ''
             for cookie in cookie_list:
                 if 'name' in cookie and 'value' in cookie:
@@ -84,7 +87,7 @@ def get_cookie_from_network(account_id, account_password):
                             pickle.dump(cookies_dict, f)
                         print('successfully save cookies into {}. \n'.format(COOKIES_SAVE_PATH))
                     else:
-                        pass
+                        pass  # 如果已存在不用对比一下然后考虑要不要更新Cookie吗
                 else:
                     cookies_dict = dict()
                     cookies_dict[account_id] = cookie_string

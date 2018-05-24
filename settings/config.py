@@ -29,13 +29,13 @@ ID_FILE_PATH = './settings/id_file'
 
 
 # change this to your PhantomJS unzip path, point to bin/phantomjs executable file, full path
-PHANTOM_JS_PATH = '/Users/jintian/phantomjs-2.1.1-macosx/bin/phantomjs'
+PHANTOM_JS_PATH = '/Users/admin/phantomjs-2.1.1-macosx/bin/phantomjs' #'/Users/jintian/phantomjs-2.1.1-macosx/bin/phantomjs'
 
 
 COOKIES_SAVE_PATH = 'settings/cookies.pkl'
 
 
-CORPUS_SAVE_DIR = './scraped_corpus/'
+CORPUS_SAVE_DIR = './scraped_corpus/'  # 语料库地址
 
 DISTRIBUTE_IDS = 'distribute_ids.pkl'
 

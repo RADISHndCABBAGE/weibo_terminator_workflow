@@ -31,8 +31,11 @@ def init_accounts_cookies():
     else:
         for account in accounts:
             print('preparing cookies for account {}'.format(account))
+            # 拿到并保存Cookie
             get_cookie_from_network(account['id'], account['password'])
+
         print('checking account validation...')
+        # 拿到所有登陆成功的 account 列表
         valid_accounts = get_valid_accounts()
 
         if len(valid_accounts) == len(accounts):
@@ -62,8 +65,10 @@ def get_cookies_by_account(account_id):
 def scrap(scrap_id):
     """
     scrap a single id
+    所以每个用户id都要调用这个方法，每次执行这个方法都模拟登陆一遍我们的账号
     :return:
     """
+    # 登陆并获取Cookie操作
     valid_accounts = init_accounts_cookies()
     print('valid accounts: ', valid_accounts)
 
