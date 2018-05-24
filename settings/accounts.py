@@ -26,10 +26,9 @@ until all accounts were banned, scrap stop.
 # please set this to your own, this is fake accounts
 accounts = [
     {
-        "id": 'plt_kingdisc@zoho.com.cn',  #'jintianiloveu',
-        "password": 'kingdisc'  #'77888',
-        # "id": '18819431656',  #'jintianiloveu',
-        # "password": 'newcgerr'  #'77888',
+        "id": 'jintianiloveu',
+        "password": '77888',
+
     },
 
 ]

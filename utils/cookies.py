@@ -53,8 +53,8 @@ def get_cookie_from_network(account_id, account_password):
         try:
             print('loading PhantomJS from {}'.format(phantom_js_driver_file))
 
-            #driver = webdriver.PhantomJS(phantom_js_driver_file)
-            driver = webdriver.Chrome(CHROME_DRIVER_PATH)
+            driver = webdriver.PhantomJS(phantom_js_driver_file)
+            # driver = webdriver.Chrome(CHROME_DRIVER_PATH)
 
             # must set window size or will not find element
             # driver.set_window_size(1640, 688)
